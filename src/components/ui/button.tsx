@@ -1,0 +1,62 @@
+import * as React from "react"
+import { Slot } from "@radix-ui/react-slot"
+import { cva, type VariantProps } from "class-variance-authority"
+
+import { cn } from "@/lib/utils"
+
+const buttonVariants = cva(
+  "prism-button inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md border text-sm font-medium ring-offset-background transition-all duration-200 shadow-[inset_0_1px_0_hsl(var(--foreground)/0.1),0_8px_24px_hsl(var(--background)/0.3)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-45 disabled:active:scale-100 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  {
+    variants: {
+      variant: {
+        default:
+          "theme-primary-gradient prism-button-strong border-primary/70 text-primary-foreground hover:border-primary hover:shadow-[inset_0_1px_0_hsl(var(--foreground)/0.16),0_0_28px_hsl(var(--primary)/0.3)]",
+        destructive:
+          "prism-button-strong border-destructive/70 bg-destructive/55 text-destructive-foreground hover:bg-destructive/70",
+        outline:
+          "prism-button-soft border-foreground/15 bg-card/45 text-foreground hover:border-foreground/30 hover:bg-foreground/10 hover:text-foreground",
+        secondary:
+          "prism-button-soft border-foreground/12 bg-foreground/[0.06] text-secondary-foreground hover:border-foreground/25 hover:bg-foreground/10",
+        subtle:
+          "prism-button-soft border-foreground/10 bg-foreground/[0.04] text-foreground hover:bg-foreground/[0.08]",
+        ghost:
+          "prism-button-soft border-transparent bg-transparent shadow-none hover:border-foreground/10 hover:bg-foreground/[0.06] hover:text-foreground",
+        link: "text-primary underline-offset-4 hover:underline",
+      },
+      size: {
+        // 44px minimum on every touch-reachable size.
+        default: "h-11 px-4 py-2",
+        sm: "h-11 rounded-md px-3",
+        lg: "h-12 rounded-md px-6",
+        icon: "h-11 w-11",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "default",
+    },
+  }
+)
+
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {
+  asChild?: boolean
+}
+
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, variant, size, asChild = false, ...props }, ref) => {
+    const Comp = asChild ? Slot : "button"
+    return (
+      <Comp
+        className={cn(buttonVariants({ variant, size, className }))}
+        ref={ref}
+        {...props}
+      />
+    )
+  }
+)
+Button.displayName = "Button"
+
+// eslint-disable-next-line react-refresh/only-export-components
+export { Button, buttonVariants }
